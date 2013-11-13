@@ -6,7 +6,24 @@
       body { 
         background: black; 
         color: #6f6;
-        }
+      }
+
+      #counter {
+        margin: auto;
+        margin-top: 10%;
+        font-size: 2em;
+        text-align: center;
+      }
+
+      #config {
+        margin:auto;
+        padding: 10px;
+        width: 600px;
+        background: #eee;
+        color: black;
+        font-family: sans-serif;
+        display: none;
+      }
     </style>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
@@ -44,10 +61,20 @@
       }
 
       window.setInterval(update_counter, 1000)
+
+      // to be executed when the DOM has loaded
+      $(function() {
+        $('#counter').click(function()  { 
+          $('#config').toggle("slide")
+        })
+      })
     </script>
   </head>
   <body>
   <div id="counter">
+  </div>
+  <div id="config">
+    This is where the configuration will be.
   </div>
   </body>
 </html>
