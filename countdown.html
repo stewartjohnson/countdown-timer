@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Countdown Timer</title>
+    <style type="text/css">
+      body { 
+        background: black; 
+        color: #6f6;
+        }
+    </style>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+    <script style="text/javascript">
+      var targetDate = new Date("November 14, 2013 14:00")
+      var units = [ // specifies the time units all based in milliseconds
+        [604800000, "week"   ],
+        [ 86400000, "day"    ],
+        [  3600000, "hour"   ],
+        [    60000, "minute" ],
+        [     1000, "second" ]
+      ]
+
+      // returns an array of ints that are the number of weeks, days, etc
+      // between the two date parameters. Assumes first_date comes before 
+      // second_date.
+      var date_diff = function(first_date, second_date) {
+        result = []
+        var remainder = second_date - first_date
+
+        units.forEach(function(e) {
+          var num = e[0]
+          result.push(Math.floor(remainder/num))
+          remainder = remainder % num
+        })
+        return result
+      }
+
+      var update_counter = function() {
+        $('#counter').text( 
+          $.map(date_diff(new Date(), targetDate), function(e,i) {
+            return e == 0 ? "" : e + " " + units[i][1] + (e != 1 ? "s" : "")
+          }).join(" ")
+        )
+      }
+
+      window.setInterval(update_counter, 1000)
+    </script>
+  </head>
+  <body>
+  <div id="counter">
+  </div>
+  </body>
+</html>
