@@ -1,4 +1,4 @@
 countdown-timer
 ===============
 
-Javascript countdown timer
+Javascript countdown timer.
