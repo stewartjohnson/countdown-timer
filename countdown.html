@@ -5,7 +5,6 @@
     <style type="text/css">
       body { 
         background: black; 
-        color: #6f6;
       }
 
       #counter {
@@ -13,22 +12,26 @@
         margin-top: 10%;
         font-size: 2em;
         text-align: center;
+        color: #6f6;
       }
 
       #config {
         margin:auto;
-        padding: 10px;
+        padding: 20px;
         width: 600px;
         background: #eee;
         color: black;
         font-family: sans-serif;
         display: none;
+        -moz-border-radius: 15px;
+        border-radius: 15px;
+        min-height: 200px
       }
     </style>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
     <script style="text/javascript">
-      var targetDate = new Date("November 14, 2013 14:00")
       var units = [ // specifies the time units all based in milliseconds
         [604800000, "week"   ],
         [ 86400000, "day"    ],
@@ -53,28 +56,39 @@
       }
 
       var update_counter = function() {
+        targetDate = new Date($('#datepicker').val()+" "+$('#timepicker').val())
         $('#counter').text( 
           $.map(date_diff(new Date(), targetDate), function(e,i) {
-            return e == 0 ? "" : e + " " + units[i][1] + (e != 1 ? "s" : "")
+            return e == 0 ? "" : e + " " + units[i][1] + (e != 1 ? "s" : "");
           }).join(" ")
-        )
+        );
       }
 
-      window.setInterval(update_counter, 1000)
+      window.setInterval(update_counter, 1000);
 
-      // to be executed when the DOM has loaded
       $(function() {
         $('#counter').click(function()  { 
-          $('#config').toggle("slide")
-        })
-      })
+          $('#config').toggle("slide");
+        });
+      });
+
+      $(function() {
+        $( "#datepicker" ).datepicker({ dateFormat: "DD, d MM yy" });
+      });
+
+      $(function() {
+        d = new Date();
+        d.setDate(d.getDate()+1);
+        $("#datepicker").val(d.toDateString("DD, d MM yy"));
+      });
     </script>
   </head>
   <body>
   <div id="counter">
   </div>
   <div id="config">
-    This is where the configuration will be.
+    <p>Date: <input type="text" id="datepicker" size="50"/>
+       Time: <input type="text" id="timepicker" value="12:00"/></p>
   </div>
   </body>
 </html>
