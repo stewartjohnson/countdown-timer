@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>Countdown Timer</title>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
     <style type="text/css">
       body { 
         background: black; 
@@ -10,6 +11,7 @@
       #counter {
         margin: auto;
         margin-top: 10%;
+        margin-bottom: 30px;
         font-size: 2em;
         text-align: center;
         color: #6f6;
@@ -28,35 +30,41 @@
         min-height: 200px
       }
     </style>
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
     <script style="text/javascript">
-      var units = [ // specifies the time units all based in milliseconds
-        [604800000, "week"   ],
-        [ 86400000, "day"    ],
-        [  3600000, "hour"   ],
-        [    60000, "minute" ],
-        [     1000, "second" ]
+      var units = [ // specifies the available time units all based in milliseconds
+        //       ms       desc   enabled
+        [ 31536000000,   "year",  true ],
+        [   604800000,   "week",  true ],
+        [    86400000,    "day",  true ],
+        [     3600000,   "hour",  true ],
+        [       60000, "minute",  true ],
+        [        1000, "second",  true ]
       ]
 
       // returns an array of ints that are the number of weeks, days, etc
       // between the two date parameters. Assumes first_date comes before 
       // second_date.
       var date_diff = function(first_date, second_date) {
-        result = []
-        var remainder = second_date - first_date
+        result = [];
+        var remainder = second_date - first_date;
 
         units.forEach(function(e) {
-          var num = e[0]
-          result.push(Math.floor(remainder/num))
-          remainder = remainder % num
-        })
-        return result
+          if (e[2]) { // only use the enabled values
+            var num = e[0];
+            result.push(Math.floor(remainder/num));
+            remainder = remainder % num;
+          }
+          else {
+            result.push(0);
+          }
+        });
+        return result;
       }
 
       var update_counter = function() {
-        targetDate = new Date($('#datepicker').val()+" "+$('#timepicker').val())
+        targetDate = new Date($('#datepicker').val()+" "+$('#timepicker').val());
         $('#counter').text( 
           $.map(date_diff(new Date(), targetDate), function(e,i) {
             return e == 0 ? "" : e + " " + units[i][1] + (e != 1 ? "s" : "");
@@ -73,13 +81,19 @@
       });
 
       $(function() {
-        $( "#datepicker" ).datepicker({ dateFormat: "DD, d MM yy" });
+        $( "#datepicker" ).datepicker({ dateFormat: "D, d MM yy" });
       });
 
       $(function() {
         d = new Date();
-        d.setDate(d.getDate()+1);
-        $("#datepicker").val(d.toDateString("DD, d MM yy"));
+        d.setDate(d.getDate()+1); // initialise to tomorrow
+        $("#datepicker").val(d.toDateString("D, d MM yy"));
+      });
+
+      $(function() {
+        $('.units').change(function() {
+          units[parseInt($(this).val())][2] = $(this).is(':checked');
+        });
       });
     </script>
   </head>
@@ -87,8 +101,21 @@
   <div id="counter">
   </div>
   <div id="config">
-    <p>Date: <input type="text" id="datepicker" size="50"/>
-       Time: <input type="text" id="timepicker" value="12:00"/></p>
+    <h1>Configuration Options</h1>
+    <fieldset>
+      <legend>Target Date</legend>
+      <p>Date: <input type="text" id="datepicker" size="50"/>
+         Time: <input type="text" id="timepicker" value="12:00"/></p>
+    </fieldset>
+    <fieldset>
+      <legend>Display Units</legend>
+      <label for="units_years"><input type="checkbox" checked="checked" id="units_years" class="units" value="0" /><span>Years</span></label>
+      <label for="units_weeks"><input type="checkbox" checked="checked" id="units_weeks" class="units" value="1" /><span>Weeks</span></label>
+      <label for="units_weeks"><input type="checkbox" checked="checked" id="units_days" class="units" value="2" /><span>Days</span></label>
+      <label for="units_weeks"><input type="checkbox" checked="checked" id="units_hours" class="units" value="3" /><span>Hours</span></label>
+      <label for="units_weeks"><input type="checkbox" checked="checked" id="units_minutes" class="units" value="4" /><span>Minutes</span></label>
+      <label for="units_weeks"><input type="checkbox" checked="checked" id="units_seconds" class="units" value="5" /><span>Seconds</span></label>
+    </fieldset>
   </div>
   </body>
 </html>
