@@ -29,6 +29,13 @@
         border-radius: 15px;
         min-height: 200px
       }
+
+      #commands {
+        margin: auto;
+        text-align: center;
+        padding: 10px;
+      }
+
     </style>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
@@ -76,7 +83,11 @@
 
       $(function() {
         $('#counter').click(function()  { 
-          $('#config').toggle("slide");
+          $('#config').show({ effect: "slide", easing: "easeOutExpo", duration: 1500, direction: "right"});
+        });
+
+        $('#close_config').click(function() {
+          $('#config').hide({ effect: "slide", easing: "easeInExpo", duration: 1000, direction: "left"});
         });
       });
 
@@ -116,6 +127,9 @@
       <label for="units_weeks"><input type="checkbox" checked="checked" id="units_minutes" class="units" value="4" /><span>Minutes</span></label>
       <label for="units_weeks"><input type="checkbox" checked="checked" id="units_seconds" class="units" value="5" /><span>Seconds</span></label>
     </fieldset>
+    <div id="commands">
+      <input type="button" id="close_config" value="Done" />
+    </div>
   </div>
   </body>
 </html>
